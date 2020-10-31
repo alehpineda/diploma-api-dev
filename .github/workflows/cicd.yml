@@ -64,7 +64,7 @@ jobs:
 
   heroku_deploy:
     name: Deploy Image
-    needs: docker_cicd
+    needs: security_checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
