@@ -29,7 +29,6 @@ jobs:
 
   pytest:
     name: Unit Testing
-    needs: flake8
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -52,7 +51,6 @@ jobs:
         path: reports/pytest/
 
   security_checks:
-    needs: pytest
     runs-on: ubuntu-latest
     name: Security check
     steps:
@@ -62,9 +60,28 @@ jobs:
         with:
           path: app/
 
+  buildx:
+    runs-on: ubuntu-latest
+    name: Docker Build
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+      -
+        name: Builder instance name
+        run: echo ${{ steps.buildx.outputs.name }}
+      -
+        name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+
   heroku_deploy:
     name: Deploy Image
-    needs: security_checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
