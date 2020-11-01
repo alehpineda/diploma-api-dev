@@ -60,7 +60,7 @@ jobs:
         with:
           path: app/
 
-  build_docker:
+  docker_build:
     runs-on: ubuntu-latest
     name: Docker Build
     steps:
@@ -71,14 +71,10 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       -
-        name: Build and push
-        id: docker_build
+        name: Build Image
         uses: docker/build-push-action@v2
         with:
           tags: alehpineda/diploma_api:latest
-      -
-        name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
 
   heroku_deploy:
     name: Deploy Image
@@ -91,5 +87,5 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }} #Must be unique in Heroku
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true
-          healthcheck: "https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/health" # update with your endpoint
+          healthcheck: "https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/v1/health" # update with your endpoint
           delay: 10
