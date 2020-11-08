@@ -29,4 +29,4 @@ def post_data(participant: Participant) -> Diploma:
 
 @app.get("/v1/health", status_code=200)
 def health_check():
-    return {"Message": "DIPLOMA API V1 - Up and running!!!"}
+    return {"Message": "DIPLOMA API V10 - Up and running!!!"}
