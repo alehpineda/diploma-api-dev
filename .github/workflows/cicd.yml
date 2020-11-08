@@ -89,8 +89,3 @@ jobs:
           usedocker: true
           healthcheck: "https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/v1/health" # update with your endpoint
           delay: 10
-          justlogin: true
-      - run: |
-          heroku container:login
-          # Run commands you would typically run from the heroku cli on your local machine to deploy your code
-          heroku stack:set heroku-18
