@@ -67,8 +67,8 @@ jobs:
         run: |
           pip install pytest pytest-cov mutmut junit2html
           mutmut run || true
-          mutmut junitxml > report
-          junit2html report
+          mutmut junitxml > report.xml
+          junit2html report.xml reports/mutmut/report.html
       - name: Archive mutmut results
         uses: actions/upload-artifact@v1
         with:
