@@ -1,6 +1,7 @@
 import os
 import logging
 
+from datetime import datetime
 from app.logger_helper import get_logger, change_logger_location
 
 
@@ -43,6 +44,7 @@ def test_logs_file_stream(capsys, caplog):
     # Log file created
     assert os.path.isfile(log_file_0)
     assert os.path.isfile(log_file_1)
+
     log_delete(log_file_0, log_file_1)  # delete logs
     # No logs exists
     assert not os.path.isfile(log_file_0)
@@ -59,5 +61,16 @@ def test_logs_stream_only(caplog, capsys):
     captured = capsys.readouterr()
     assert "|INFO|root|test_logs_stream_only|Hola Mundo\n" in captured.out
     assert [("root", logging.INFO, "Hola Mundo")] == caplog.record_tuples
+    # test date format
+    assert datetime.strptime([rec.asctime for rec in caplog.records][0], "%Y-%m-%d %H:%M:%S")
     # Check no log file is created
+    assert not os.path.isfile("logger.log")
+
+
+def test_create_log():
+    assert not os.path.isfile("logger.log")
+    logger = get_logger(log_file_flag=True)
+    logger.info("Hola Mundo")
+    assert os.path.isfile("logger.log")
+    os.remove("logger.log")
     assert not os.path.isfile("logger.log")

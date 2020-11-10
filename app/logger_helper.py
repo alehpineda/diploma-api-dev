@@ -7,7 +7,7 @@ from logging import Logger
 
 DEFAULT_FORMAT = "%(asctime)s|%(levelname)s|%(name)s|%(funcName)s|%(message)s"
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-FILE_SIZE = 1000 * 1000
+FILE_SIZE = 1000000
 LOG_FILE = "logger.log"
 
 
