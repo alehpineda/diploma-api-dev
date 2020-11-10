@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
 
   flake8:
-    name: Code Quality
+    name: Flake8
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
         path: reports/flake8/
 
   pytest:
-    name: Unit Testing
+    name: Pytest
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -49,6 +49,31 @@ jobs:
       with:
         name: pytest-coverage-report
         path: reports/pytest/
+
+  mutmut:
+    name: Mutmut
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test with pytest
+        run: |
+          pip install pytest pytest-cov mutmut junit2html
+          mutmut run
+          mutmut junitxml > report
+          junit2html report
+      - name: Archive mutmut results
+        uses: actions/upload-artifact@v1
+        with:
+          name: mutmut-report
+          path: reports/mutmut/
 
   security_checks:
     runs-on: ubuntu-latest
@@ -77,7 +102,7 @@ jobs:
           tags: alehpineda/diploma_api:latest
 
   heroku_deploy:
-    name: Deploy Image
+    name: Heroku Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
